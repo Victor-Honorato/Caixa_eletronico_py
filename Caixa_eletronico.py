@@ -7,17 +7,21 @@ class Banco:
         self.saldo = 0
 
     def depositar(self, valor):
+        # Função para realizar um depósito na conta do banco
         self.saldo += valor
 
     def sacar(self, valor):
+        # Função para realizar um saque na conta do banco
         if valor <= self.saldo:
             self.saldo -= valor
             return True
         else:
+            # Exibe uma mensagem de erro se o saldo for insuficiente
             messagebox.showerror("Erro", "Saldo insuficiente. Saque não realizado.")
             return False
 
     def extrato(self):
+        # Retorna uma string formatada com o extrato da conta
         return f"Saldo atual: R${self.saldo:.2f}"
 
 class InterfaceGrafica:
@@ -78,16 +82,19 @@ class InterfaceGrafica:
         self.barra_status.pack(side=tk.BOTTOM, fill=tk.X)
 
     def exibir_opcoes_banco(self):
+        # Função para exibir as opções do banco ao clicar no botão "Escolher Banco"
         self.frame_escolher_banco.pack_forget()
         self.frame_opcoes_banco.pack()
         self.botao_selecionar["state"] = tk.NORMAL
         self.botao_voltar["state"] = tk.NORMAL
 
     def atualizar_saldo(self):
+        # Função para atualizar o rótulo de saldo com o saldo atual do banco
         if self.banco_atual:
             self.label_saldo["text"] = f"Saldo: R${self.banco_atual.saldo:.2f}"
 
     def selecionar_banco(self):
+        # Função para selecionar o banco escolhido e exibir uma mensagem
         banco_selecionado = self.opcoes_bancos.get()
         self.banco_atual = self.bancos[banco_selecionado]
         self.atualizar_saldo()
@@ -95,6 +102,7 @@ class InterfaceGrafica:
         self.habilitar_opcoes_banco()
 
     def habilitar_opcoes_banco(self):
+        # Função para habilitar os botões após selecionar o banco
         self.botao_depositar["state"] = tk.NORMAL
         self.botao_sacar["state"] = tk.NORMAL
         self.botao_extrato["state"] = tk.NORMAL
@@ -102,6 +110,7 @@ class InterfaceGrafica:
         self.botao_voltar["state"] = tk.DISABLED
 
     def depositar(self):
+        # Função para realizar um depósito, exibindo uma caixa de diálogo para inserir o valor
         if self.banco_atual:
             valor_deposito = float(simpledialog.askstring("Depositar", "Digite o valor a depositar:"))
             self.banco_atual.depositar(valor_deposito)
@@ -109,6 +118,7 @@ class InterfaceGrafica:
             self.mostrar_mensagem_status("Depósito realizado com sucesso!")
 
     def sacar(self):
+        # Função para realizar um saque, exibindo uma caixa de diálogo para inserir o valor
         if self.banco_atual:
             valor_saque = float(simpledialog.askstring("Sacar", "Digite o valor a sacar:"))
             if self.banco_atual.sacar(valor_saque):
@@ -116,23 +126,28 @@ class InterfaceGrafica:
                 self.mostrar_mensagem_status("Saque realizado com sucesso!")
 
     def mostrar_extrato(self):
+        # Função para exibir um diálogo com o extrato da conta bancária
         if self.banco_atual:
             extrato = self.banco_atual.extrato()
             messagebox.showinfo("Extrato", extrato)
 
     def sair(self):
+        # Função para fechar o aplicativo
         self.master.destroy()
 
     def mostrar_mensagem_status(self, mensagem):
+        # Função para exibir mensagens na barra de status
         self.barra_status["text"] = mensagem
 
     def voltar(self):
+        # Função para voltar à tela de escolha do banco
         self.frame_opcoes_banco.pack_forget()
         self.frame_escolher_banco.pack()
         self.botao_selecionar["state"] = tk.NORMAL
         self.botao_voltar["state"] = tk.DISABLED
 
 def main():
+    # Função principal para iniciar o aplicativo
     root = tk.Tk()
     app = InterfaceGrafica(root)
     root.mainloop()
